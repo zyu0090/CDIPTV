@@ -1,2 +1,2 @@
 # CDIPTV
-IPTV M3U 
+IPTV M3U for Telecom in Chengdu
