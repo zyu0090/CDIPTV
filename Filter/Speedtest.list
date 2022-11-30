@@ -2,3 +2,6 @@
 # > Speedtest
 DOMAIN-SUFFIX,ooklaserver.net,DIRECT
 DOMAIN-SUFFIX,speedtest.net,DIRECT
+# > Migu
+DOMAIN-SUFFIX,migu.cn,DIRECT
+DOMAIN-SUFFIX,miguvideo.com,DIRECT
