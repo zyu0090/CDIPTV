@@ -5,3 +5,5 @@ DOMAIN-SUFFIX,speedtest.net,DIRECT
 # > Migu
 DOMAIN-SUFFIX,migu.cn,DIRECT
 DOMAIN-SUFFIX,miguvideo.com,DIRECT
+# > CDAD
+DOMAIN-SUFFIX,cdadri.com,DIRECT
