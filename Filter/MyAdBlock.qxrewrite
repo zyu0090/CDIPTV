@@ -5,8 +5,11 @@
 #京东
 ^https?:\/\/api\.m\.jd\.com\/client\.action\?functionId=start$ url reject-array
 
-#滴滴出行
+#滴滴出行@ddgksf2013
 ^https?://res\.xiaojukeji\.com\/resapi\/activity\/mget url reject-dict
 ^https?:\/\/res\.xiaojukeji\.com\/resapi\/activity\/get(Ruled|Preload|PasMultiNotices) url reject
 
-hostname = api.m.jd.com,res.xiaojukeji.com
+#天府通@ddgksf2013
+^https?:\/\/tft-app\.cdtft\.cn\/gateway-customer\/tftapp\/tft-ams\/api\/appAd url response-body officialAdvertResultVo response-body ddgksf2013
+
+hostname = api.m.jd.com,res.xiaojukeji.com,tft-app.cdtft.cn
