@@ -1,8 +1,8 @@
-#高德地图广告
+#高德地图
 ^http:\/\/ems\.youku\.com\/imp\? url reject
 ^http:\/\/optimus-ads\.amap\.com\/uploadimg\/.+ url reject
 
-#京东开屏广告屏蔽(改写自surge)
+#京东
 ^https?:\/\/api\.m\.jd\.com\/client\.action\?functionId=start$ url reject-array
 
 hostname = api.m.jd.com
