@@ -5,4 +5,8 @@
 #京东
 ^https?:\/\/api\.m\.jd\.com\/client\.action\?functionId=start$ url reject-array
 
-hostname = api.m.jd.com
+#滴滴出行
+^https?://res\.xiaojukeji\.com\/resapi\/activity\/mget url reject-dict
+^https?:\/\/res\.xiaojukeji\.com\/resapi\/activity\/get(Ruled|Preload|PasMultiNotices) url reject
+
+hostname = api.m.jd.com,res.xiaojukeji.com
