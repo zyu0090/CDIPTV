@@ -7,3 +7,5 @@ DOMAIN-SUFFIX,migu.cn,DIRECT
 DOMAIN-SUFFIX,miguvideo.com,DIRECT
 # > CDAD
 DOMAIN-SUFFIX,cdadri.com,DIRECT
+# > Amap
+HOST,amdc.m.taobao.com,REJECT
