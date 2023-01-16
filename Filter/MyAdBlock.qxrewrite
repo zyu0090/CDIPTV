@@ -1,11 +1,7 @@
 #京东@blackmatrix7
 ^https?:\/\/api\.m\.jd\.com\/client\.action\?functionId=start url script-response-body https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/script/startup/startup.js
 
-#滴滴出行@ddgksf2013
-^https?://res\.xiaojukeji\.com\/resapi\/activity\/mget url reject-dict
-^https?:\/\/res\.xiaojukeji\.com\/resapi\/activity\/get(Ruled|Preload|PasMultiNotices) url reject
-
 #天府通@ddgksf2013
 ^https?:\/\/tft-app\.cdtft\.cn\/gateway-customer\/tftapp\/tft-ams\/api\/appAd url response-body officialAdvertResultVo response-body ddgksf2013
 
-hostname = api.m.jd.com,res.xiaojukeji.com,tft-app.cdtft.cn
+hostname = api.m.jd.com,tft-app.cdtft.cn
