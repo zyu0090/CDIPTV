@@ -12,3 +12,4 @@ HOST,amdc.m.taobao.com,REJECT
 # > Sogou
 DOMAIN-SUFFIX,sogou.com,REJECT
 DOMAIN-SUFFIX,sogoucdn.com,REJECT
+DOMAIN-SUFFIX,sginput.qq.com,REJECT
