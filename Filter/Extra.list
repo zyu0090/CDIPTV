@@ -9,3 +9,5 @@ DOMAIN-SUFFIX,miguvideo.com,DIRECT
 DOMAIN-SUFFIX,cdadri.com,DIRECT
 # > Amap
 HOST,amdc.m.taobao.com,REJECT
+# > Sogou
+HOST,sogou.com,REJECT
