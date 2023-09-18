@@ -14,3 +14,4 @@ DOMAIN-SUFFIX,sogou.com,REJECT
 DOMAIN-SUFFIX,sogoucdn.com,REJECT
 DOMAIN-SUFFIX,sginput.qq.com,REJECT
 HOST,sg.bls.mdt.qq.com,REJECT
+HOST,oth.str.mdt.qq.com,REJECT
