@@ -7,6 +7,6 @@
 ^https:\/\/sctel10000\.cn\/config\/myZoneConfig\/getMyHomeMenus url echo-response application/json echo-response sctel.json
 
 #职工普惠
-^https:\/\/preprod\.cdzghome\.com:8100\/banner\/bootUp url reject-200
+^https:\/\/preprod\.cdzghome\.com:8100\/banner\/bootUp url reject
 
 hostname = api.m.jd.com, sctel10000.cn, preprod.cdzghome.com
