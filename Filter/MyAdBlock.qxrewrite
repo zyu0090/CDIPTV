@@ -2,4 +2,7 @@
 ^https:\/\/api\.m\.jd\.com\/client\.action\?functionId=(personinfoBusiness|start) url script-response-body https://raw.githubusercontent.com/RuCu6/QuanX/main/Scripts/myBlockAds.js
 ^https:\/\/api\.m\.jd\.com\/client\.action\?functionId=(stationPullService|uniformRecommend) url reject-dict
 
-hostname = api.m.jd.com
+#sctel@RuCu6
+^https:\/\/sctel10000\.cn\/config\/ads\/adsInfo url reject-dict
+
+hostname = api.m.jd.com, sctel10000.cn
