@@ -9,4 +9,8 @@
 #职工普惠
 ^https:\/\/preprod\.cdzghome\.com:8100\/banner\/bootUp url reject-200
 
-hostname = api.m.jd.com, sctel10000.cn, preprod.cdzghome.com
+#丰巢微信小程序净化@fmz200
+^https:\/\/webchatapp\.fcbox\.com\/fcboxactivityweb\/api\/v2\/clientPage url reject-dict
+^https:\/\/dsp\.fcbox\.com url reject-dict
+
+hostname = api.m.jd.com, sctel10000.cn, preprod.cdzghome.com, webchatapp.fcbox.com, dsp.fcbox.com
