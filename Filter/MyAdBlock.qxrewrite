@@ -1,6 +1,6 @@
 #京东@RuCu6
-^https:\/\/api\.m\.jd\.com\/client\.action\?functionId=(personinfoBusiness|start) url script-response-body https://raw.githubusercontent.com/RuCu6/QuanX/main/Scripts/myBlockAds.js
-^https:\/\/api\.m\.jd\.com\/client\.action\?functionId=(stationPullService|uniformRecommend) url reject-dict
+^https:\/\/api\.m\.jd\.com\/client\.action\?functionId=(deliverLayer|myOrderInfo|orderTrackBusiness|personinfoBusiness|start|welcomeHome) url script-response-body https://raw.githubusercontent.com/RuCu6/QuanX/main/Scripts/jd.js
+^https:\/\/api\.m\.jd\.com\/client\.action\?functionId=(searchBoxWord|stationPullService|uniformRecommend) url reject-dict
 
 #sctel@RuCu6
 ^https:\/\/sctel10000\.cn\/config\/ads\/adsInfo url reject-dict
