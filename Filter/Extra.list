@@ -1,9 +1,27 @@
 # ------
 # > Speedtest
-DOMAIN-SUFFIX,ooklaserver.net,DIRECT
-DOMAIN-SUFFIX,speedtest.net,DIRECT
+HOST,speed.dler.io,DIRECT
+HOST,videoqoe-akamai.stvidtest.net,DIRECT
+HOST,videoqoe-fastly.stvidtest.net,DIRECT
+HOST,videoqoe.stvidtest.net,DIRECT
+HOST-SUFFIX,cdnst.net,DIRECT
+HOST-SUFFIX,cellmaps.com,DIRECT
+HOST-SUFFIX,ekahau.cloud,DIRECT
+HOST-SUFFIX,ekahau.com,DIRECT
+HOST-SUFFIX,fast.com,DIRECT
+HOST-SUFFIX,ookla.com,DIRECT
+HOST-SUFFIX,ooklaserver.net,DIRECT
+HOST-SUFFIX,pingtest.net,DIRECT
+HOST-SUFFIX,speed.cloudflare.com,DIRECT
+HOST-SUFFIX,speed.dler.io,DIRECT
+HOST-SUFFIX,speedtest.co,DIRECT
+HOST-SUFFIX,speedtest.net,DIRECT
+HOST-SUFFIX,speedtestcustom.com,DIRECT
+HOST-SUFFIX,webtest.net,DIRECT
+HOST-KEYWORD,speedtest,DIRECT
+USER-AGENT,SpeedTest*,DIRECT
 # > Migu
-DOMAIN-SUFFIX,migu.cn,DIRECT
-DOMAIN-SUFFIX,miguvideo.com,DIRECT
+HOST-SUFFIX,migu.cn,DIRECT
+HOST-SUFFIX,miguvideo.com,DIRECT
 # > CDAD
-DOMAIN-SUFFIX,cdadri.com,DIRECT
+HOST-SUFFIX,cdadri.com,DIRECT
