@@ -47,6 +47,8 @@ http://192.168.199.100:4022/rtp/239.93.42.54:5140
 http://192.168.199.100:4022/rtp/239.93.42.63:5140
 #EXTINF:-1, CCTV-8K
 http://192.168.199.100:4022/rtp/239.93.42.61:5140
+#EXTINF:-1, MUTV
+https://bcovlive-a.akamaihd.net/r2d2c4ca5bf57456fb1d16255c1a535c8/eu-west-1/6058004203001/playlist.m3u8
 #EXTINF:-1, 百视通4K
 http://192.168.199.100:4022/rtp/239.93.42.75:5140
 #EXTINF:-1, 四川卫视高清
