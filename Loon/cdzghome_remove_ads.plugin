@@ -10,9 +10,9 @@
 #!icon = https://www.cdzghome.com/static/img/logo@2x.ed93b722.png
 #!date = 2024-11-09 10:20:29
 
-[Script]
+[Rewrite]
 # 移除职工普惠开屏广告
-^https:\/\/preprod\.cdzghome\.com:8100\/banner\/bootUp url reject
+^https:\/\/preprod\.cdzghome\.com:8100\/banner\/bootUp url reject-dict
 
 [MitM]
 hostname = preprod.cdzghome.com
