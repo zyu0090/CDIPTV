@@ -12,6 +12,6 @@
 
 [Rewrite]
 # 移除职工普惠开屏广告
-^https:\/\/preprod\.cdzghome\.com:8100\/banner\/bootUp reject-dict
+^https:\/\/preprod\.cdzghome\.com:8100\/banner\/bootUp url reject-dict
 [MitM]
 hostname = preprod.cdzghome.com
