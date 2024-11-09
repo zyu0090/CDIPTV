@@ -1,0 +1,18 @@
+#!name = 大众点评去广告
+#!desc = 过滤大众点评开屏广告
+#!openUrl = https://itunes.apple.com/app/id351091731
+#!author = fmz200[https://github.com/fmz200]
+#!tag = 去广告
+#!system = 
+#!system_version = 
+#!loon_version = 3.2.1(749)
+#!homepage = 
+#!icon = https://play-lh.googleusercontent.com/dIqb1UE5hB90PyJj4nVWahcUz6X7LEb4whV0GBvsCIAiPjU9WfPzqLYBcerkN7emUw=w240-h480-rw
+#!date = 2024-11-09 11:20:31
+
+[Rewrite]
+# 移除大众点评开屏广告
+http-response ^https?:\/\/img\.meituan\.net\/dpmobile\/ script-path=https://raw.githubusercontent.com/zirawell/Ad-Cleaner/main/Collection/js/dianping.js, requires-body=true, timeout=60, tag=大众点评
+
+[MitM]
+hostname = img.meituan.net
