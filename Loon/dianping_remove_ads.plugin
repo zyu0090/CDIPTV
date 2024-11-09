@@ -10,7 +10,7 @@
 #!icon = https://play-lh.googleusercontent.com/dIqb1UE5hB90PyJj4nVWahcUz6X7LEb4whV0GBvsCIAiPjU9WfPzqLYBcerkN7emUw=w240-h480-rw
 #!date = 2024-11-09 11:20:31
 
-[Rewrite]
+[Script]
 # 移除大众点评开屏广告
 http-response ^https?:\/\/img\.meituan\.net\/dpmobile\/ script-path=https://raw.githubusercontent.com/zirawell/Ad-Cleaner/main/Collection/js/dianping.js, requires-body=true, timeout=60, tag=大众点评
 
