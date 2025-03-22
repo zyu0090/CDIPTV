@@ -1,4 +1,5 @@
 # NAME: Bybit
+HOST,monitor-frontend-collector.a.bybit-aws.com,Bybit
 HOST-KEYWORD,bybit,Bybit
 HOST-KEYWORD,byapps,Bybit
 HOST-KEYWORD,myfin,Bybit
