@@ -5,7 +5,7 @@
 #!icon = 
 #!date = 2026-03-16 17:00:09
 
-[Rules]
+[Rule]
 DOMAIN,ad.12306.cn,DIRECT
 
 [Rewrite]
