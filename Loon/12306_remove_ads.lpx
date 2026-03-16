@@ -1,0 +1,18 @@
+#!name = 12306去广告
+#!desc = 参考其他人规则，自用的去广告插件
+#!openUrl = 
+#!author = 
+#!icon = 
+#!date = 2026-03-16 17:00:09
+
+[Rules]
+DOMAIN,ad.12306.cn,DIRECT
+
+[Rewrite]
+^https:\/\/ad\.12306\.cn\/ad\/ser\/getAdList$ response-body-json-del materialsList advertParam
+
+[Script]
+http-request ^https?:\/\/ad\.12306\.cn\/ad\/ser\/getAdList script-path=https://github.com/ddgksf2013/Scripts/raw/master/12306.js, requires-body=true, timeout=60, tag=12306
+
+[MitM]
+hostname = ad.12306.cn
