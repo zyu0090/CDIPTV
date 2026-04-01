@@ -11,7 +11,7 @@
 #!date = 2026-04-01 15:20:30
 
 [Rewrite]
-# 移除职工普惠开屏广告
+# 移除驴充充开屏广告
 ^https?:\/\/appapi\.lvcchong\.com\/appBaseApi\/.*vertisement url reject-200
 
 [MitM]
