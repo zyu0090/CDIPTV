@@ -1,0 +1,18 @@
+#!name = 驴充充去广告
+#!desc = 过滤驴充充开屏广告
+#!openUrl = https://itunes.apple.com/app/id1567140525
+#!author = ddgksf2013[https://github.com/ddgksf2013]
+#!tag = 去广告
+#!system = 
+#!system_version = 
+#!loon_version = 3.2.1(749)
+#!homepage = 
+#!icon = https://github.com/zyu0090/CDIPTV/blob/aac4eeb7d930761c59bbc282e045dd296a7c593c/Loon/44528031.png?raw=true
+#!date = 2026-04-01 15:20:30
+
+[Rewrite]
+# 移除职工普惠开屏广告
+^https?:\/\/appapi\.lvcchong\.com\/appBaseApi\/.*vertisement url reject-200
+
+[MitM]
+hostname = appapi.lvcchong.com
