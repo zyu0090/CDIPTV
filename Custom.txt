@@ -1,0 +1,1 @@
+truvaze.com##div.container.mx-auto.mt-3.mb-3.px-2.relative:nth-child(3) > div.fixed.bottom-0.right-0.z-50.bg-black\/80:nth-child(10) > div.relative.w-\[300px\].h-\[250px\]
