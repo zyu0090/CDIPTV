@@ -1,6 +1,6 @@
-truvaze.com##div.container.mx-auto.mt-3.mb-3.px-2.relative:nth-child(3) > div.fixed.bottom-0.right-0.z-50.bg-black\/80:nth-child(10) > div.relative.w-\[300px\].h-\[250px\]
-truvaze.com##div.container.mx-auto.px-4.py-8.xl\:flex.xl\:justify-center.xl\:gap-4:nth-child(3) > div.fixed.bottom-0.right-0.z-50.bg-black\/80:last-child > div.relative.w-\[300px\].h-\[250px\]
 truvaze.com##div.container.mx-auto.mt-3.mb-3.px-2.relative:nth-child(3) > div.mx-auto:nth-child(2) > a.\!no-underline:last-child > img.rounded.shrink-0
 truvaze.com##div.container.mx-auto.mt-3.mb-3.px-2.relative:nth-child(3) > div.mx-auto:nth-child(2) > a.\!no-underline:nth-child(4) > div.flex.items-center.gap-3.border.border-\[\#2AABEE\].rounded-lg.px-2.py-2.mb-4.bg-\[\#EFF9FF\].hover\:bg-\[\#d9f0fd\].transition-colors
-truvaze.com##div.container.mx-auto.px-4.py-8.xl\:flex.xl\:justify-center.xl\:gap-4:nth-child(3) > div.max-w-\[600px\].w-full:nth-child(4) > a.\!no-underline:nth-child(3) > img.rounded.shrink-0
-truvaze.com##div.container.mx-auto.px-4.py-8.xl\:flex.xl\:justify-center.xl\:gap-4:nth-child(3) > div.max-w-\[600px\].w-full:nth-child(4) > a.\!no-underline:nth-child(2) > div.flex.items-center.gap-3.border.border-\[\#2AABEE\].rounded-lg.px-2.py-2.mb-4.bg-\[\#EFF9FF\].hover\:bg-\[\#d9f0fd\].transition-colors
+truvaze.com##div.container.mx-auto.mt-3.mb-3.px-2.relative:nth-child(3) > div.fixed.bottom-0.right-0.z-50.bg-black\/80:nth-child(10) > div.relative.w-\[300px\].h-\[250px\]
+truvaze.com##div.container.mx-auto.px-4.py-8.xl\:flex.xl\:justify-center.xl\:gap-4:nth-child(23) > div.max-w-\[600px\].w-full:nth-child(4) > a.\!no-underline:nth-child(2) > div.flex.items-center.gap-3.border.border-\[\#2AABEE\].rounded-lg.px-2.py-2.mb-4.bg-\[\#EFF9FF\].hover\:bg-\[\#d9f0fd\].transition-colors
+truvaze.com##div.container.mx-auto.px-4.py-8.xl\:flex.xl\:justify-center.xl\:gap-4:nth-child(23) > div.max-w-\[600px\].w-full:nth-child(4) > a.\!no-underline:nth-child(3) > img.rounded.shrink-0
+truvaze.com##div.container.mx-auto.px-4.py-8.xl\:flex.xl\:justify-center.xl\:gap-4:nth-child(23) > div.fixed.bottom-0.right-0.z-50.bg-black\/80:last-child > div.relative.w-\[300px\].h-\[250px\]
