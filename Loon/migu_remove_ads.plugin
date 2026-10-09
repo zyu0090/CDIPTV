@@ -2,7 +2,7 @@
 #!desc = 移除咪咕视频开屏倒计时/启动广告、信息流推广与个人中心推广，补齐 MitM 解密域名
 #!author = zyu0090
 #!icon = https://img.cmvideo.cn/publish/noms/2025/12/23/1O6LE0EUF63G7.png
-#!date = 2026-10-09 17:15:00
+#!date = 2026-10-09 17:25:00
 
 [Rule]
 # 广告追踪与离线物料域名直接拒流
@@ -13,33 +13,29 @@ DOMAIN, ggadoffline.miguvideo.com, REJECT
 DOMAIN, ggv.cmvideo.cn, REJECT
 
 [Rewrite]
-# 1. 开屏与闪屏广告专用拦截 (以 reject-dict 返回空配置，促使 App 直接跳过倒计时)
-^https?:\/\/app-sc\.miguvideo\.com\/v\d\/splash reject-dict
-^https?:\/\/app-sc\.miguvideo\.com\/app-management\/v\d+\/staticcache\/settings\/miguvideo\/.*SPLASH.* reject-dict
-^https?:\/\/app-sc\.miguvideo\.com\/app-management\/v\d+\/staticcache\/settings\/miguvideo\/.*BOOT.* reject-dict
-^https?:\/\/ggc\.miguvideo\.com\/v1\/iflyad\/deliverysystem\/direct\/ reject-dict
-^https?:\/\/gg.*\.miguvideo\.com\/.*splash.* reject-dict
-^https?:\/\/gg.*\.cmvideo\.cn\/.*splash.* reject-dict
-
-# 2. 广告素材与图片请求 Mock (避免客户端等待图片超时产生 5 秒兜底等待)
+# 1. 广告素材与图片请求 Mock (避免客户端等待图片超时产生兜底等待)
 ^https?:\/\/app-sc\.miguvideo\.com\/app-management\/v1\/staticcache\/settings\/miguvideo\/SHARE_PIC reject-dict
 ^https?:\/\/public-deliver\d*\.miguvideo\.com\/deliver\/site\/batchMatch\/mergeSpot\/miguvideo\/ reject-dict
 ^https?:\/\/recommend-dy\.miguvideo\.com\/recommend-dynamic\/dataSource\/v1\/recommend\/merge reject-dict
 ^https?:\/\/common-sc\.miguvideo\.com\/videoActivity\/activityList\/ reject-dict
 ^https?:\/\/common-sc\.miguvideo\.com\/task\/v7\/task-list\/cmvideo\/visitor reject-200
 
-# 3. 广告 SDK 上报与分发接口
-^https?:\/\/ggx.*\.miguvideo\.com\/request\/sdk reject-dict
-^https?:\/\/ggic.*\.miguvideo\.com\/ad\/ reject-dict
-^https?:\/\/.*miguvideo\.com\/request\/sdk reject-200
-^https?:\/\/gg.*\.cmvideo\.cn\/v\d+\/iflyad\/ reject-200
-^https?:\/\/ggic.*\.cmvideo\.cn\/ad\/ reject-200
-^https?:\/\/ggx.*\.cmvideo\.cn\/request\/ reject-200
+# 2. 广告 SDK 上报与分发接口
+^https?:\/\/ggx[^\/]*\.miguvideo\.com\/request\/sdk reject-dict
+^https?:\/\/ggic[^\/]*\.miguvideo\.com\/ad\/ reject-dict
+^https?:\/\/gg[^\/]*\.cmvideo\.cn\/v\d+\/iflyad\/ reject-200
+^https?:\/\/ggic[^\/]*\.cmvideo\.cn\/ad\/ reject-200
+^https?:\/\/ggx[^\/]*\.cmvideo\.cn\/request\/ reject-200
 ^https?:\/\/[^\/]+\/cdn-adn\/ reject-200
 
 [Script]
+# 开屏与启动配置：通过脚本将 duration/countdown 置 0 并关闭展示开关
+http-response ^https?:\/\/app-sc\.miguvideo\.com\/v\d\/splash script-path=https://raw.githubusercontent.com/zyu0090/CDIPTV/refs/heads/main/Loon/migu_splash_fix.js, requires-body=true, timeout=10, tag=咪咕开屏倒计时清零
+http-response ^https?:\/\/app-sc\.miguvideo\.com\/app-management\/v\d+\/staticcache\/settings\/miguvideo\/.*(SPLASH|BOOT).* script-path=https://raw.githubusercontent.com/zyu0090/CDIPTV/refs/heads/main/Loon/migu_splash_fix.js, requires-body=true, timeout=10, tag=咪咕开屏配置清零
+http-response ^https?:\/\/ggc\.miguvideo\.com\/v1\/iflyad\/deliverysystem\/direct\/ script-path=https://raw.githubusercontent.com/zyu0090/CDIPTV/refs/heads/main/Loon/migu_splash_fix.js, requires-body=true, timeout=10, tag=咪咕广告分发清零
+
 # 个人中心横幅与推广拦截
-http-response ^https?:\/\/display-sc\.miguvideo\.com\/display\/v3\/static\/PERSONAL_CENTER$ script-path=https://raw.githubusercontent.com/zyu0090/vpn_tool/refs/heads/main/Loon/Script/miguvideo_ads.js, requires-body=true, timeout=30, tag=咪咕视频个人中心去广告
+http-response ^https?:\/\/display-sc\.miguvideo\.com\/display\/v3\/static\/PERSONAL_CENTER$ script-path=https://raw.githubusercontent.com/zyu0090/vpn_tool/refs/heads/main/Loon/Script/miguvideo_ads.js, requires-body=true, timeout=10, tag=咪咕视频个人中心去广告
 
 [Mitm]
 hostname = ggc.miguvideo.com, public-deliver*.miguvideo.com, display*-sc.miguvideo.com, recommend-dy.miguvideo.com, app-sc.miguvideo.com, common-sc.miguvideo.com, ggx*.miguvideo.com, ggic*.miguvideo.com, gg*.cmvideo.cn
