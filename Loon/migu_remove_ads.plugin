@@ -1,41 +1,42 @@
 #!name = 咪咕视频去广告
-#!desc = 移除咪咕视频开屏倒计时/启动广告、信息流推广与个人中心推广，补齐 MitM 解密域名
-#!author = zyu0090
+#!desc = 适用于咪咕视频的去开屏、信息流及个人中心推广插件
+#!author = cngzsunny
 #!icon = https://img.cmvideo.cn/publish/noms/2025/12/23/1O6LE0EUF63G7.png
-#!date = 2026-10-09 17:25:00
+#!date = 2026-03-19 14:09:00
 
 [Rule]
-# 广告追踪与离线物料域名直接拒流
 DOMAIN-SUFFIX, ad.cmvideo.cn, REJECT
-DOMAIN-SUFFIX, migu.kssws.ks-cdn.com, REJECT
+DOMAIN, ggc.cmvideo.cn, REJECT
+DOMAIN, ggv.cmvideo.cn, REJECT
+DOMAIN, ggx.cmvideo.cn, REJECT
+DOMAIN, ggx03.miguvideo.com, REJECT
+DOMAIN, ggic03.miguvideo.com, REJECT
 DOMAIN, ggmk.miguvideo.com, REJECT
 DOMAIN, ggadoffline.miguvideo.com, REJECT
-DOMAIN, ggv.cmvideo.cn, REJECT
+DOMAIN-SUFFIX, migu.kssws.ks-cdn.com, REJECT
 
 [Rewrite]
-# 1. 广告素材与图片请求 Mock (避免客户端等待图片超时产生兜底等待)
-^https?:\/\/app-sc\.miguvideo\.com\/app-management\/v1\/staticcache\/settings\/miguvideo\/SHARE_PIC reject-dict
-^https?:\/\/public-deliver\d*\.miguvideo\.com\/deliver\/site\/batchMatch\/mergeSpot\/miguvideo\/ reject-dict
+# 广告位图片及空数据响应
+^https?:\/\/ggc\.miguvideo\.com\/v1\/iflyad\/deliverysystem\/direct\/ reject-img
+^https?:\/\/public-deliver9\.miguvideo\.com\/deliver\/site\/batchMatch\/mergeSpot\/miguvideo\/ reject-dict
 ^https?:\/\/recommend-dy\.miguvideo\.com\/recommend-dynamic\/dataSource\/v1\/recommend\/merge reject-dict
+^https?:\/\/app-sc\.miguvideo\.com\/app-management\/v1\/staticcache\/settings\/miguvideo\/SHARE_PIC reject-dict
 ^https?:\/\/common-sc\.miguvideo\.com\/videoActivity\/activityList\/ reject-dict
+^https?:\/\/ggx.+\.miguvideo\.com\/request\/sdk.+[^?]*$ reject-dict
+^https?:\/\/ggic\d+\.miguvideo\.com\/ad\/ reject-dict
+
+# cmvideo 域名重写响应
+^https?:\/\/gg\w+?\.cmvideo\.cn\/v\d\/iflyad\/ reject-200
+^https?:\/\/ggic\d?\.cmvideo\.cn\/ad\/ reject-200
+^https?:\/\/ggx\.cmvideo\.cn\/request\/ reject-200
+^https?:\/\/.+?\/cdn-adn\/ reject-200
+
+# 任务与 SDK 请求
+^https?:\/\/.*miguvideo\.com\/request\/sdk reject-200
 ^https?:\/\/common-sc\.miguvideo\.com\/task\/v7\/task-list\/cmvideo\/visitor reject-200
 
-# 2. 广告 SDK 上报与分发接口
-^https?:\/\/ggx[^\/]*\.miguvideo\.com\/request\/sdk reject-dict
-^https?:\/\/ggic[^\/]*\.miguvideo\.com\/ad\/ reject-dict
-^https?:\/\/gg[^\/]*\.cmvideo\.cn\/v\d+\/iflyad\/ reject-200
-^https?:\/\/ggic[^\/]*\.cmvideo\.cn\/ad\/ reject-200
-^https?:\/\/ggx[^\/]*\.cmvideo\.cn\/request\/ reject-200
-^https?:\/\/[^\/]+\/cdn-adn\/ reject-200
-
 [Script]
-# 开屏与启动配置：通过脚本将 duration/countdown 置 0 并关闭展示开关
-http-response ^https?:\/\/app-sc\.miguvideo\.com\/v\d\/splash script-path=https://raw.githubusercontent.com/zyu0090/CDIPTV/refs/heads/main/Loon/migu_splash_fix.js, requires-body=true, timeout=10, tag=咪咕开屏倒计时清零
-http-response ^https?:\/\/app-sc\.miguvideo\.com\/app-management\/v\d+\/staticcache\/settings\/miguvideo\/.*(SPLASH|BOOT).* script-path=https://raw.githubusercontent.com/zyu0090/CDIPTV/refs/heads/main/Loon/migu_splash_fix.js, requires-body=true, timeout=10, tag=咪咕开屏配置清零
-http-response ^https?:\/\/ggc\.miguvideo\.com\/v1\/iflyad\/deliverysystem\/direct\/ script-path=https://raw.githubusercontent.com/zyu0090/CDIPTV/refs/heads/main/Loon/migu_splash_fix.js, requires-body=true, timeout=10, tag=咪咕广告分发清零
-
-# 个人中心横幅与推广拦截
-http-response ^https?:\/\/display-sc\.miguvideo\.com\/display\/v3\/static\/PERSONAL_CENTER$ script-path=https://raw.githubusercontent.com/zyu0090/vpn_tool/refs/heads/main/Loon/Script/miguvideo_ads.js, requires-body=true, timeout=10, tag=咪咕视频个人中心去广告
+http-response ^https?:\/\/display-sc\.miguvideo\.com\/display\/v3\/static\/PERSONAL_CENTER$ script-path=https://raw.githubusercontent.com/cngzsunny/vpn_tool/refs/heads/main/Loon/Script/miguvideo_ads.js, requires-body=true, timeout=60, tag=咪咕视频个人中心去广告
 
 [Mitm]
-hostname = ggc.miguvideo.com, public-deliver*.miguvideo.com, display*-sc.miguvideo.com, recommend-dy.miguvideo.com, app-sc.miguvideo.com, common-sc.miguvideo.com, ggx*.miguvideo.com, ggic*.miguvideo.com, gg*.cmvideo.cn
+hostname = ggc.miguvideo.com, public-deliver9.miguvideo.com, display*-sc.miguvideo.com, recommend-dy.miguvideo.com, app-sc.miguvideo.com, common-sc.miguvideo.com, ggx*.miguvideo.com, ggic*.miguvideo.com, gg*.cmvideo.cn
