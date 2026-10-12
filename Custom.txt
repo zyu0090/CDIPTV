@@ -1,8 +1,11 @@
-! 1. 拦截右下角悬浮弹窗/广告（匹配固定定位及遮罩样式）
-truvaze.com##div[class*="fixed bottom-0 right-0"]
+! === truvaze.com 通用去广告规则 ===
 
-! 2. 拦截 Telegram / 浅蓝色边框引流卡片
-truvaze.com##div[class*="border-[#2AABEE]"]
+! 1. 拦截右下角悬浮弹窗（合并第 3 条与第 6 条）
+truvaze.com##div.fixed.bottom-0.right-0[class*="z-50"]
 
-! 3. 拦截顶部推广大图（匹配包含 rounded 和 shrink-0 特征的链接图片）
-truvaze.com##a[class*="!no-underline"] > img.rounded.shrink-0
+! 2. 拦截蓝色推广卡片及其跳转链接（合并第 2 条与第 4 条）
+truvaze.com##a:has(> div[class*="border-[#2AABEE]"])
+
+! 3. 拦截广告位推广横幅图片（合并第 1 条与第 5 条，限定在内容/广告卡片内防误伤）
+truvaze.com##div[class*="max-w-[600px]"] > a:has(> img.rounded.shrink-0)
+truvaze.com##div.mx-auto > a:has(> img.rounded.shrink-0)
