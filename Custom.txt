@@ -10,9 +10,5 @@ truvaze.com##a:has(> div[class*="border-[#2AABEE]"])
 truvaze.com##div[class*="max-w-[600px]"] > a:has(> img.rounded.shrink-0)
 truvaze.com##div.mx-auto > a:has(> img.rounded.shrink-0)
 
-! 移除顶部 App 唤起 Bar
-grok.com##div[role="banner"]
-grok.com##header[class*="sticky"]
-
 ! 隐藏包含升级按钮的横幅包装层
 grok.com##div[class*="fixed"][class*="bottom"]:has(button)
