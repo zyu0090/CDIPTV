@@ -12,3 +12,6 @@ truvaze.com##div.mx-auto > a:has(> img.rounded.shrink-0)
 
 ! 隐藏包含升级按钮的横幅包装层
 grok.com##div[class*="fixed"][class*="bottom"]:has(button)
+
+huangguoai.com##.hg-hero
+huangguoai.com##.hg-announce
