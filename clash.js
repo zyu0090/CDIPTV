@@ -1,6 +1,6 @@
 function main(config) {
-  // 1. 过滤垃圾/残留节点（流量信息、到期提示、群组推广等）
-  const dirtyFilter = /(?i)GB|Traffic|Expire|Premium|频道|订阅|ISP|流量|到期|重置|官网|群|通知/;
+  // 1. 过滤垃圾/残留节点（流量信息、到期提示、群组推广等），修正为 JS 原生正则修饰符 /i
+  const dirtyFilter = /GB|Traffic|Expire|Premium|频道|订阅|ISP|流量|到期|重置|官网|群|通知/i;
   const proxies = (config.proxies || []).filter((p) => !dirtyFilter.test(p.name));
   const allNodes = proxies.map((p) => p.name);
   if (allNodes.length === 0) return config;
@@ -135,7 +135,7 @@ function main(config) {
     },
   ];
 
-  // 4. Rule Providers (全面接入 MetaCubeX/meta-rules-dat + blackmatrix7 细分规则)
+  // 4. Rule Providers (MetaCubeX/meta-rules-dat + blackmatrix7)
   const metaProvider = (type, subPath, behavior) => ({
     type: "http",
     format: "yaml",
@@ -155,7 +155,7 @@ function main(config) {
   });
 
   config["rule-providers"] = {
-    // 基础与 Geo 规则（MetaCubeX 数据源）
+    // 基础与 Geo 规则（MetaCubeX）
     private: metaProvider("geosite", "private", "domain"),
     cn_domain: metaProvider("geosite", "cn", "domain"),
     cn_ip: metaProvider("geoip", "cn", "ipcidr"),
@@ -165,7 +165,7 @@ function main(config) {
     telegram_domain: metaProvider("geosite", "telegram", "domain"),
     telegram_ip: metaProvider("geoip", "telegram", "ipcidr"),
 
-    // 应用细分规则（blackmatrix7 数据源）
+    // 应用细分规则（blackmatrix7）
     openai: bmProvider("OpenAI"),
     claude: bmProvider("Claude"),
     gemini: bmProvider("Gemini"),
