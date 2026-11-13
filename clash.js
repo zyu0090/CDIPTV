@@ -1,5 +1,5 @@
 function main(config) {
-  // 1. 过滤垃圾/残留节点（流量信息、到期提示、群组推广等），修正为 JS 原生正则修饰符 /i
+  // 1. 过滤垃圾/残留节点
   const dirtyFilter = /GB|Traffic|Expire|Premium|频道|订阅|ISP|流量|到期|重置|官网|群|通知/i;
   const proxies = (config.proxies || []).filter((p) => !dirtyFilter.test(p.name));
   const allNodes = proxies.map((p) => p.name);
@@ -17,7 +17,7 @@ function main(config) {
   const sgNodes = filterNodes(/\u65b0\u52a0\u5761|\u5761|\u72ee\u57ce|SG|Singapore/i);
   const usNodes = filterNodes(/\u7f8e|\u6ce2\u7279\u5170|\u8fbe\u62c9\u65af|\u4fc4\u52d2\u5188|\u51e4\u51f0\u57ce|\u8d39\u5229\u8499|\u7845\u8c37|\u62c9\u65af\u7ef4\u52a0\u65af|\u6d1b\u6749\u77f6|\u5723\u4f55\u585e|\u5723\u514b\u62c9\u62c9|\u897f\u96c5\u56fe|\u829d\u52a0\u54e5|US|United States/i);
 
-  // 3. 策略组（全配图标，去除了 Auto 和 AdBlock）
+  // 3. 策略组配置（已修正 github.png 图标，并移除了 Direct 组和 DIRECT 节点选项）
   const iconBase = "https://testingcf.jsdelivr.net/gh/Orz-3/mini@master/Color";
 
   config["proxy-groups"] = [
@@ -25,7 +25,7 @@ function main(config) {
       name: "Proxy",
       type: "select",
       icon: `${iconBase}/Static.png`,
-      proxies: ["HK", "TW", "JP", "SG", "US", "DIRECT", ...allNodes],
+      proxies: ["HK", "TW", "JP", "SG", "US", ...allNodes],
     },
     {
       name: "AI",
@@ -43,13 +43,13 @@ function main(config) {
       name: "Spotify",
       type: "select",
       icon: `${iconBase}/Spotify.png`,
-      proxies: ["Proxy", "US", "HK", "JP", "SG", "DIRECT", ...allNodes],
+      proxies: ["Proxy", "US", "HK", "JP", "SG", ...allNodes],
     },
     {
       name: "GitHub",
       type: "select",
-      icon: `${iconBase}/Github.png`,
-      proxies: ["Proxy", "HK", "JP", "SG", "US", "DIRECT", ...allNodes],
+      icon: `${iconBase}/github.png`,
+      proxies: ["Proxy", "HK", "JP", "SG", "US", ...allNodes],
     },
     {
       name: "Google",
@@ -67,27 +67,21 @@ function main(config) {
       name: "AppleID",
       type: "select",
       icon: `${iconBase}/Apple.png`,
-      proxies: ["DIRECT", "Proxy", "US", "HK", "JP"],
+      proxies: ["Proxy", "US", "HK", "JP", ...allNodes],
     },
     {
       name: "Microsoft",
       type: "select",
       icon: `${iconBase}/Microsoft.png`,
-      proxies: ["DIRECT", "Proxy", "US", "HK"],
-    },
-    {
-      name: "Direct",
-      type: "select",
-      icon: `${iconBase}/Direct.png`,
-      proxies: ["DIRECT", "Proxy"],
+      proxies: ["Proxy", "US", "HK", ...allNodes],
     },
     {
       name: "Final",
       type: "select",
       icon: `${iconBase}/Final.png`,
-      proxies: ["Proxy", "Direct"],
+      proxies: ["Proxy", ...allNodes],
     },
-    // 地区自动优选测速组
+    // 地区自动测速优选组
     {
       name: "HK",
       type: "url-test",
@@ -135,7 +129,7 @@ function main(config) {
     },
   ];
 
-  // 4. Rule Providers (MetaCubeX/meta-rules-dat + blackmatrix7)
+  // 4. Rule Providers (MetaCubeX + blackmatrix7)
   const metaProvider = (type, subPath, behavior) => ({
     type: "http",
     format: "yaml",
@@ -176,10 +170,10 @@ function main(config) {
     microsoft: bmProvider("Microsoft"),
   };
 
-  // 5. 分流规则（Rules）
+  // 5. 分流规则（直连走系统内置原生 DIRECT，不暴露为策略组）
   config["rules"] = [
-    // 局域网 / 私有地址直连
-    "RULE-SET,private,Direct",
+    // 局域网 / 私有地址默认 DIRECT
+    "RULE-SET,private,DIRECT",
 
     // AI 相关分流
     "RULE-SET,openai,AI",
@@ -199,13 +193,13 @@ function main(config) {
     "RULE-SET,telegram_domain,Telegram",
     "RULE-SET,telegram_ip,Telegram",
 
-    // 境外常用域名走代理
+    // 境外常用域名走 Proxy
     "RULE-SET,geolocation_not_cn,Proxy",
 
-    // 国内域名及国内 IP 直连
-    "RULE-SET,cn_domain,Direct",
-    "RULE-SET,cn_ip,Direct,no-resolve",
-    "GEOIP,CN,Direct",
+    // 国内域名及国内 IP 默认 DIRECT 直连
+    "RULE-SET,cn_domain,DIRECT",
+    "RULE-SET,cn_ip,DIRECT,no-resolve",
+    "GEOIP,CN,DIRECT",
 
     // 兜底策略
     "MATCH,Final",
