@@ -1,209 +1,208 @@
 function main(config) {
-  // 1. 过滤垃圾/残留节点
-  const dirtyFilter = /GB|Traffic|Expire|Premium|频道|订阅|ISP|流量|到期|重置|官网|群|通知/i;
-  const proxies = (config.proxies || []).filter((p) => !dirtyFilter.test(p.name));
-  const allNodes = proxies.map((p) => p.name);
-  if (allNodes.length === 0) return config;
+  try {
+    return build(config);
+  } catch (e) {
+    if (typeof console !== "undefined" && console.log) {
+      console.log("[clash.js] build failed, fallback to raw config: " + e);
+    }
+    return config;
+  }
+}
 
-  // 2. 按地区筛选节点
-  const filterNodes = (regex) => {
-    const matched = allNodes.filter((name) => regex.test(name));
-    return matched.length > 0 ? matched : ["DIRECT"];
-  };
+function build(config) {
+  config = config || {};
 
-  const hkNodes = filterNodes(/\u6e2f|HK|hk|Hong Kong|HongKong|hongkong/i);
-  const twNodes = filterNodes(/\u53f0|\u65b0\u5317|\u5f70\u5316|TW|Taiwan/i);
-  const jpNodes = filterNodes(/\u65e5\u672c|\u5ddd\u65e5|\u4e1c\u4eac|\u5927\u962a|\u6cc9\u65e5|\u57fc\u7389|\u6caa\u65e5|\u6df1\u65e5|[^-]\u65e5|JP|Japan/i);
-  const sgNodes = filterNodes(/\u65b0\u52a0\u5761|\u5761|\u72ee\u57ce|SG|Singapore/i);
-  const usNodes = filterNodes(/\u7f8e|\u6ce2\u7279\u5170|\u8fbe\u62c9\u65af|\u4fc4\u52d2\u5188|\u51e4\u51f0\u57ce|\u8d39\u5229\u8499|\u7845\u8c37|\u62c9\u65af\u7ef4\u52a0\u65af|\u6d1b\u6749\u77f6|\u5723\u4f55\u585e|\u5723\u514b\u62c9\u62c9|\u897f\u96c5\u56fe|\u829d\u52a0\u54e5|US|United States/i);
-
-  // 3. 策略组配置
-  const iconBase = "https://testingcf.jsdelivr.net/gh/Orz-3/mini@master/Color";
-
-  config["proxy-groups"] = [
-    {
-      name: "Proxy",
-      type: "select",
-      icon: `${iconBase}/Static.png`,
-      proxies: ["HK", "TW", "JP", "SG", "US", ...allNodes],
-    },
-    {
-      name: "AI",
-      type: "select",
-      icon: `${iconBase}/OpenAI.png`,
-      proxies: ["JP", "SG", "US", "TW", "Proxy", ...allNodes],
-    },
-    {
-      name: "YouTube",
-      type: "select",
-      icon: `${iconBase}/YouTube.png`,
-      proxies: ["Proxy", "HK", "TW", "JP", "SG", "US", ...allNodes],
-    },
-    {
-      name: "Spotify",
-      type: "select",
-      icon: `${iconBase}/Spotify.png`,
-      proxies: ["Proxy", "US", "HK", "JP", "SG", ...allNodes],
-    },
-    {
-      name: "GitHub",
-      type: "select",
-      icon: `${iconBase}/github.png`,
-      proxies: ["Proxy", "HK", "JP", "SG", "US", ...allNodes],
-    },
-    {
-      name: "Google",
-      type: "select",
-      icon: `${iconBase}/Google.png`,
-      proxies: ["Proxy", "HK", "TW", "JP", "SG", "US", ...allNodes],
-    },
-    {
-      name: "Telegram",
-      type: "select",
-      icon: `${iconBase}/Telegram.png`,
-      proxies: ["Proxy", "SG", "HK", "JP", "US", ...allNodes],
-    },
-    {
-      name: "AppleID",
-      type: "select",
-      icon: `${iconBase}/Apple.png`,
-      proxies: ["DIRECT", "Proxy", "US", "HK", "JP", ...allNodes], // 保留 DIRECT 选项
-    },
-    {
-      name: "Microsoft",
-      type: "select",
-      icon: `${iconBase}/Microsoft.png`,
-      proxies: ["DIRECT", "Proxy", "US", "HK", ...allNodes],       // 保留 DIRECT 选项
-    },
-    {
-      name: "Final",
-      type: "select",
-      icon: `${iconBase}/Final.png`,
-      proxies: ["Proxy", ...allNodes],
-    },
-    // 地区自动测速优选组
-    {
-      name: "HK",
-      type: "url-test",
-      icon: `${iconBase}/HK.png`,
-      url: "http://www.gstatic.com/generate_204",
-      interval: 300,
-      tolerance: 50,
-      proxies: hkNodes,
-    },
-    {
-      name: "TW",
-      type: "url-test",
-      icon: `${iconBase}/TW.png`,
-      url: "http://www.gstatic.com/generate_204",
-      interval: 300,
-      tolerance: 50,
-      proxies: twNodes,
-    },
-    {
-      name: "JP",
-      type: "url-test",
-      icon: `${iconBase}/JP.png`,
-      url: "http://www.gstatic.com/generate_204",
-      interval: 300,
-      tolerance: 50,
-      proxies: jpNodes,
-    },
-    {
-      name: "SG",
-      type: "url-test",
-      icon: `${iconBase}/SG.png`,
-      url: "http://www.gstatic.com/generate_204",
-      interval: 300,
-      tolerance: 50,
-      proxies: sgNodes,
-    },
-    {
-      name: "US",
-      type: "url-test",
-      icon: `${iconBase}/US.png`,
-      url: "http://www.gstatic.com/generate_204",
-      interval: 300,
-      tolerance: 50,
-      proxies: usNodes,
-    },
+  var RESERVED = [
+    "Proxy", "AI", "YouTube", "Spotify", "GitHub", "Google", "Telegram",
+    "AppleID", "Microsoft", "Final", "HK", "TW", "JP", "SG", "US",
+    "DIRECT", "REJECT", "GLOBAL", "PASS", "COMPATIBLE"
   ];
 
-  // 4. Rule Providers (MetaCubeX + blackmatrix7)
-  const metaProvider = (type, subPath, behavior) => ({
-    type: "http",
-    format: "yaml",
-    behavior,
-    url: `https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/${type}/${subPath}.yaml`,
-    path: `./ruleset/${subPath}.yaml`,
-    interval: 86400,
-  });
+  // ---------- 1. 剔除机场广告 / 到期信息节点 ----------
+  var DIRTY = /(剩余流量|到期|过期|套餐|官网|重置|订阅|购买|续费|客服|通知|频道|群组|Traffic|Expire|Premium|Official|Renew|Website)/i;
 
-  const bmProvider = (name) => ({
-    type: "http",
-    format: "yaml",
-    behavior: "classical",
-    url: `https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/${name}/${name}.yaml`,
-    path: `./ruleset/${name.toLowerCase()}.yaml`,
-    interval: 86400,
-  });
+  var src = Object.prototype.toString.call(config.proxies) === "[object Array]" ? config.proxies : [];
+  var kept = [];
+  var i;
+  for (i = 0; i < src.length; i++) {
+    var node = src[i];
+    if (!node || typeof node.name !== "string") continue;
+    if (!node.name.replace(/\s/g, "")) continue;
+    if (DIRTY.test(node.name)) continue;
+    kept.push(node);
+  }
 
-  config["rule-providers"] = {
-    // 基础与 Geo 规则（MetaCubeX）
-    private: metaProvider("geosite", "private", "domain"),
-    cn_domain: metaProvider("geosite", "cn", "domain"),
-    cn_ip: metaProvider("geoip", "cn", "ipcidr"),
-    geolocation_not_cn: metaProvider("geosite", "geolocation-!cn", "domain"),
-    google_domain: metaProvider("geosite", "google", "domain"),
-    google_ip: metaProvider("geoip", "google", "ipcidr"),
-    telegram_domain: metaProvider("geosite", "telegram", "domain"),
-    telegram_ip: metaProvider("geoip", "telegram", "ipcidr"),
-
-    // 应用细分规则（blackmatrix7）
-    openai: bmProvider("OpenAI"),
-    claude: bmProvider("Claude"),
-    gemini: bmProvider("Gemini"),
-    youtube: bmProvider("YouTube"),
-    spotify: bmProvider("Spotify"),
-    github: bmProvider("GitHub"),
-    appleid: bmProvider("AppleID"),
-    microsoft: bmProvider("Microsoft"),
+  // ---------- 2. 地区匹配（first-match 互斥） ----------
+  var ZONES = ["HK", "TW", "JP", "SG", "US"];
+  var RE = {
+    // 英文缩写必须带非字母边界，否则 "plus"/"AUS"/"Russia" 会被吃进 US 组
+    HK: /(香港|港|HKG|Hong ?Kong|(^|[^a-z])HK([^a-z]|$))/i,
+    TW: /(台湾|台灣|台北|新北|台中|台南|高雄|彰化|新竹|桃园|Taiwan|(^|[^a-z])(TW|CHT)([^a-z]|$))/i,
+    // 去掉了裸 "日" 与裸 "美"，只保留可判定的组合词
+    JP: /(日本|东京|東京|大阪|埼玉|札幌|名古屋|(川|泉|沪|深|广|苏|杭)日|Japan|(^|[^a-z])(JP|JPN)([^a-z]|$))/i,
+    SG: /(新加坡|狮城|坡|Singapore|(^|[^a-z])(SG|SGP)([^a-z]|$))/i,
+    US: /(美国|美西|美东|美中|美区|洛杉矶|硅谷|圣何塞|西雅图|波特兰|俄勒冈|达拉斯|凤凰城|拉斯维加斯|纽约|芝加哥|迈阿密|阿什本|United ?States|(^|[^a-z])(US|USA|LAX|SJC|SEA|NYC)([^a-z]|$))/i
   };
 
-  // 5. 分流规则
-  config["rules"] = [
-    // 局域网 / 私有地址默认原生 DIRECT
-    "RULE-SET,private,DIRECT",
+  var buckets = {};
+  ZONES.forEach(function (z) { buckets[z] = []; });
+  kept.forEach(function (p) {
+    for (var k = 0; k < ZONES.length; k++) {
+      if (RE[ZONES[k]].test(p.name)) {
+        buckets[ZONES[k]].push(p);
+        return; // 互斥：一个节点只进一个地区组
+      }
+    }
+  });
 
-    // AI 相关分流
+  // ---------- 3. 节点名唯一化，并避开策略组同名 ----------
+  var used = Object.create(null);
+  for (i = 0; i < RESERVED.length; i++) used[RESERVED[i].toLowerCase()] = 1;
+
+  kept.forEach(function (p) {
+    var base = p.name.trim();
+    var name = base;
+    var n = 1;
+    while (used[name.toLowerCase()]) {
+      n++;
+      name = base + " #" + n;
+    }
+    used[name.toLowerCase()] = 1;
+    p.name = name;
+  });
+
+  config.proxies = kept; // 关键：把清理结果写回，垃圾节点不再出现在节点列表里
+
+  var allNames = kept.map(function (p) { return p.name; });
+  if (!allNames.length) return config;
+
+  // 地区组为空时回退到第一个真实节点（不要回退 DIRECT：AI 组会直连打不开）
+  var zoneList = {};
+  ZONES.forEach(function (z) {
+    zoneList[z] = buckets[z].length
+      ? buckets[z].map(function (p) { return p.name; })
+      : [allNames[0]];
+  });
+
+  // ---------- 4. 策略组 ----------
+  var ICON = "https://testingcf.jsdelivr.net/gh/Orz-3/mini@master/Color";
+  var HEALTH = "https://www.gstatic.com/generate_204";
+
+  function sel(name, icon, proxies) {
+    return { name: name, type: "select", icon: ICON + "/" + icon, proxies: proxies };
+  }
+  function auto(name, icon, proxies) {
+    return {
+      name: name,
+      type: "url-test",
+      icon: ICON + "/" + icon,
+      url: HEALTH,
+      interval: 300,
+      tolerance: 50,
+      lazy: true,
+      proxies: proxies
+    };
+  }
+
+  config["proxy-groups"] = [
+    sel("Proxy", "Static.png", ["HK", "TW", "JP", "SG", "US"].concat(allNames)),
+    sel("AI", "OpenAI.png", ["JP", "SG", "US", "TW", "Proxy"].concat(allNames)),
+    sel("YouTube", "YouTube.png", ["Proxy", "HK", "TW", "JP", "SG", "US"].concat(allNames)),
+    sel("Spotify", "Spotify.png", ["Proxy", "US", "HK", "JP", "SG"].concat(allNames)),
+    sel("GitHub", "github.png", ["Proxy", "HK", "JP", "SG", "US"].concat(allNames)),
+    sel("Google", "Google.png", ["Proxy", "HK", "TW", "JP", "SG", "US"].concat(allNames)),
+    sel("Telegram", "Telegram.png", ["Proxy", "SG", "HK", "JP", "US"].concat(allNames)),
+    sel("AppleID", "Apple.png", ["DIRECT", "Proxy", "US", "HK", "JP"].concat(allNames)),
+    sel("Microsoft", "Microsoft.png", ["DIRECT", "Proxy", "US", "HK"].concat(allNames)),
+    sel("Final", "Final.png", ["Proxy"].concat(allNames)),
+    auto("HK", "HK.png", zoneList.HK),
+    auto("TW", "TW.png", zoneList.TW),
+    auto("JP", "JP.png", zoneList.JP),
+    auto("SG", "SG.png", zoneList.SG),
+    auto("US", "US.png", zoneList.US)
+  ];
+
+  // ---------- 5. Rule Providers（缓存文件名必须唯一） ----------
+  function meta(type, sub, behavior) {
+    return {
+      type: "http",
+      format: "yaml",
+      behavior: behavior,
+      url: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/" + type + "/" + sub + ".yaml",
+      // 原脚本只用了 sub.yaml，导致 geosite/cn 与 geoip/cn 写同一个文件
+      path: "./ruleset/" + type + "-" + sub.replace(/!/g, "not") + ".yaml",
+      interval: 86400
+    };
+  }
+
+  function bm(name) {
+    return {
+      type: "http",
+      format: "yaml",
+      behavior: "classical",
+      url: "https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/" + name + "/" + name + ".yaml",
+      path: "./ruleset/bm-" + name.toLowerCase() + ".yaml",
+      interval: 86400
+    };
+  }
+
+  config["rule-providers"] = {
+    private: meta("geosite", "private", "domain"),
+    cn_domain: meta("geosite", "cn", "domain"),
+    cn_ip: meta("geoip", "cn", "ipcidr"),
+    geolocation_not_cn: meta("geosite", "geolocation-!cn", "domain"),
+    google_domain: meta("geosite", "google", "domain"),
+    google_ip: meta("geoip", "google", "ipcidr"),
+    telegram_domain: meta("geosite", "telegram", "domain"),
+    telegram_ip: meta("geoip", "telegram", "ipcidr"),
+    openai: bm("OpenAI"),
+    claude: bm("Claude"),
+    gemini: bm("Gemini"),
+    youtube: bm("YouTube"),
+    spotify: bm("Spotify"),
+    github: bm("GitHub"),
+    appleid: bm("AppleID"),
+    microsoft: bm("Microsoft")
+  };
+
+  // ---------- 6. 分流规则 ----------
+  config["rules"] = [
+    "RULE-SET,private,DIRECT",
+    "GEOIP,LAN,DIRECT,no-resolve",
+
     "RULE-SET,openai,AI",
     "RULE-SET,claude,AI",
     "RULE-SET,gemini,AI",
 
-    // 细分媒体及服务分流
     "RULE-SET,youtube,YouTube",
     "RULE-SET,spotify,Spotify",
     "RULE-SET,github,GitHub",
     "RULE-SET,appleid,AppleID",
     "RULE-SET,microsoft,Microsoft",
 
-    // Google / Telegram 专属规则（域名 + IP）
     "RULE-SET,google_domain,Google",
-    "RULE-SET,google_ip,Google",
+    "RULE-SET,google_ip,Google,no-resolve",
     "RULE-SET,telegram_domain,Telegram",
-    "RULE-SET,telegram_ip,Telegram",
+    "RULE-SET,telegram_ip,Telegram,no-resolve",
 
-    // 境外常用域名走 Proxy
-    "RULE-SET,geolocation_not_cn,Proxy",
-
-    // 国内域名及国内 IP 默认原生 DIRECT 直连
+    // 国内域名/网段先直连，再让境外兜底规则接盘
     "RULE-SET,cn_domain,DIRECT",
     "RULE-SET,cn_ip,DIRECT,no-resolve",
-    "GEOIP,CN,DIRECT",
+    "RULE-SET,geolocation_not_cn,Proxy",
 
-    // 兜底策略
-    "MATCH,Final",
+    "GEOIP,CN,DIRECT,no-resolve",
+    "MATCH,Final"
   ];
 
   return config;
 }
+
+// =====================================================================
+// 如果你的订阅走 proxy-providers（config.proxies 为空、节点在 provider 里），
+// 上面的显式节点名分组拿不到节点，需要改成 include-all + filter 的写法：
+//
+//   { name: "HK", type: "url-test", include-all: true,
+//     filter: "(香港|HK|Hong ?Kong)", url: "...", interval: 300 }
+//
+// 其余非地区组用 include-all: true 即可。Mihomo 1.16+ 支持 include-all。
+// =====================================================================
