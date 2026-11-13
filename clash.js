@@ -1,10 +1,11 @@
 function main(config) {
-  // 1. Extract proxy node names
-  const proxies = config.proxies || [];
+  // 1. 过滤垃圾/残留节点（流量信息、到期提示、群组推广等）
+  const dirtyFilter = /(?i)GB|Traffic|Expire|Premium|频道|订阅|ISP|流量|到期|重置|官网|群|通知/;
+  const proxies = (config.proxies || []).filter((p) => !dirtyFilter.test(p.name));
   const allNodes = proxies.map((p) => p.name);
   if (allNodes.length === 0) return config;
 
-  // 2. Filter nodes by region (keep Chinese keywords in regex to match airport node names)
+  // 2. 按地区筛选节点
   const filterNodes = (regex) => {
     const matched = allNodes.filter((name) => regex.test(name));
     return matched.length > 0 ? matched : ["DIRECT"];
@@ -16,157 +17,197 @@ function main(config) {
   const sgNodes = filterNodes(/\u65b0\u52a0\u5761|\u5761|\u72ee\u57ce|SG|Singapore/i);
   const usNodes = filterNodes(/\u7f8e|\u6ce2\u7279\u5170|\u8fbe\u62c9\u65af|\u4fc4\u52d2\u5188|\u51e4\u51f0\u57ce|\u8d39\u5229\u8499|\u7845\u8c37|\u62c9\u65af\u7ef4\u52a0\u65af|\u6d1b\u6749\u77f6|\u5723\u4f55\u585e|\u5723\u514b\u62c9\u62c9|\u897f\u96c5\u56fe|\u829d\u52a0\u54e5|US|United States/i);
 
-  // 3. Proxy Groups (Pure English)
+  // 3. 策略组（全配图标，去除了 Auto 和 AdBlock）
+  const iconBase = "https://testingcf.jsdelivr.net/gh/Orz-3/mini@master/Color";
+
   config["proxy-groups"] = [
     {
       name: "Proxy",
       type: "select",
-      proxies: ["Auto", "HK", "TW", "JP", "SG", "US", "DIRECT", ...allNodes],
-    },
-    {
-      name: "Auto",
-      type: "url-test",
-      url: "http://www.gstatic.com/generate_204",
-      interval: 300,
-      tolerance: 50,
-      proxies: allNodes,
+      icon: `${iconBase}/Static.png`,
+      proxies: ["HK", "TW", "JP", "SG", "US", "DIRECT", ...allNodes],
     },
     {
       name: "AI",
       type: "select",
+      icon: `${iconBase}/OpenAI.png`,
       proxies: ["JP", "SG", "US", "TW", "Proxy", ...allNodes],
     },
     {
       name: "YouTube",
       type: "select",
-      proxies: ["Proxy", "Auto", "HK", "TW", "JP", "SG", "US", ...allNodes],
+      icon: `${iconBase}/YouTube.png`,
+      proxies: ["Proxy", "HK", "TW", "JP", "SG", "US", ...allNodes],
     },
     {
       name: "Spotify",
       type: "select",
+      icon: `${iconBase}/Spotify.png`,
       proxies: ["Proxy", "US", "HK", "JP", "SG", "DIRECT", ...allNodes],
     },
     {
       name: "GitHub",
       type: "select",
-      proxies: ["Proxy", "Auto", "HK", "JP", "SG", "US", "DIRECT", ...allNodes],
+      icon: `${iconBase}/Github.png`,
+      proxies: ["Proxy", "HK", "JP", "SG", "US", "DIRECT", ...allNodes],
     },
     {
       name: "Google",
       type: "select",
-      proxies: ["Proxy", "Auto", "HK", "TW", "JP", "SG", "US", ...allNodes],
+      icon: `${iconBase}/Google.png`,
+      proxies: ["Proxy", "HK", "TW", "JP", "SG", "US", ...allNodes],
     },
     {
       name: "Telegram",
       type: "select",
+      icon: `${iconBase}/Telegram.png`,
       proxies: ["Proxy", "SG", "HK", "JP", "US", ...allNodes],
     },
     {
       name: "AppleID",
       type: "select",
+      icon: `${iconBase}/Apple.png`,
       proxies: ["DIRECT", "Proxy", "US", "HK", "JP"],
     },
     {
       name: "Microsoft",
       type: "select",
+      icon: `${iconBase}/Microsoft.png`,
       proxies: ["DIRECT", "Proxy", "US", "HK"],
     },
     {
       name: "Direct",
       type: "select",
+      icon: `${iconBase}/Direct.png`,
       proxies: ["DIRECT", "Proxy"],
-    },
-    {
-      name: "AdBlock",
-      type: "select",
-      proxies: ["REJECT", "DIRECT"],
     },
     {
       name: "Final",
       type: "select",
-      proxies: ["Proxy", "Direct", "Auto"],
+      icon: `${iconBase}/Final.png`,
+      proxies: ["Proxy", "Direct"],
     },
-    // Region auto-test groups
-    { name: "HK", type: "url-test", url: "http://www.gstatic.com/generate_204", interval: 300, tolerance: 50, proxies: hkNodes },
-    { name: "TW", type: "url-test", url: "http://www.gstatic.com/generate_204", interval: 300, tolerance: 50, proxies: twNodes },
-    { name: "JP", type: "url-test", url: "http://www.gstatic.com/generate_204", interval: 300, tolerance: 50, proxies: jpNodes },
-    { name: "SG", type: "url-test", url: "http://www.gstatic.com/generate_204", interval: 300, tolerance: 50, proxies: sgNodes },
-    { name: "US", type: "url-test", url: "http://www.gstatic.com/generate_204", interval: 300, tolerance: 50, proxies: usNodes },
+    // 地区自动优选测速组
+    {
+      name: "HK",
+      type: "url-test",
+      icon: `${iconBase}/HK.png`,
+      url: "http://www.gstatic.com/generate_204",
+      interval: 300,
+      tolerance: 50,
+      proxies: hkNodes,
+    },
+    {
+      name: "TW",
+      type: "url-test",
+      icon: `${iconBase}/TW.png`,
+      url: "http://www.gstatic.com/generate_204",
+      interval: 300,
+      tolerance: 50,
+      proxies: twNodes,
+    },
+    {
+      name: "JP",
+      type: "url-test",
+      icon: `${iconBase}/JP.png`,
+      url: "http://www.gstatic.com/generate_204",
+      interval: 300,
+      tolerance: 50,
+      proxies: jpNodes,
+    },
+    {
+      name: "SG",
+      type: "url-test",
+      icon: `${iconBase}/SG.png`,
+      url: "http://www.gstatic.com/generate_204",
+      interval: 300,
+      tolerance: 50,
+      proxies: sgNodes,
+    },
+    {
+      name: "US",
+      type: "url-test",
+      icon: `${iconBase}/US.png`,
+      url: "http://www.gstatic.com/generate_204",
+      interval: 300,
+      tolerance: 50,
+      proxies: usNodes,
+    },
   ];
 
-  // 4. Rule Providers (Loyalsoldier + blackmatrix7)
-  const domainProvider = (url, path) => ({
+  // 4. Rule Providers (全面接入 MetaCubeX/meta-rules-dat + blackmatrix7 细分规则)
+  const metaProvider = (type, subPath, behavior) => ({
     type: "http",
-    behavior: "domain",
-    url,
-    path,
+    format: "yaml",
+    behavior,
+    url: `https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/${type}/${subPath}.yaml`,
+    path: `./ruleset/${subPath}.yaml`,
     interval: 86400,
   });
-  const ipProvider = (url, path) => ({
+
+  const bmProvider = (name) => ({
     type: "http",
-    behavior: "ipcidr",
-    url,
-    path,
-    interval: 86400,
-  });
-  const classicalProvider = (url, path) => ({
-    type: "http",
+    format: "yaml",
     behavior: "classical",
-    url,
-    path,
+    url: `https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/${name}/${name}.yaml`,
+    path: `./ruleset/${name.toLowerCase()}.yaml`,
     interval: 86400,
   });
 
   config["rule-providers"] = {
-    reject: domainProvider("https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/reject.txt", "./ruleset/reject.yaml"),
-    private: domainProvider("https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/private.txt", "./ruleset/private.yaml"),
-    lancidr: ipProvider("https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/lancidr.txt", "./ruleset/lancidr.yaml"),
-    google: domainProvider("https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/google.txt", "./ruleset/google.yaml"),
-    telegramcidr: ipProvider("https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/telegramcidr.txt", "./ruleset/telegramcidr.yaml"),
-    gfw: domainProvider("https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/gfw.txt", "./ruleset/gfw.yaml"),
-    proxy: domainProvider("https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/proxy.txt", "./ruleset/proxy.yaml"),
-    direct: domainProvider("https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/direct.txt", "./ruleset/direct.yaml"),
-    cncidr: ipProvider("https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/cncidr.txt", "./ruleset/cncidr.yaml"),
+    // 基础与 Geo 规则（MetaCubeX 数据源）
+    private: metaProvider("geosite", "private", "domain"),
+    cn_domain: metaProvider("geosite", "cn", "domain"),
+    cn_ip: metaProvider("geoip", "cn", "ipcidr"),
+    geolocation_not_cn: metaProvider("geosite", "geolocation-!cn", "domain"),
+    google_domain: metaProvider("geosite", "google", "domain"),
+    google_ip: metaProvider("geoip", "google", "ipcidr"),
+    telegram_domain: metaProvider("geosite", "telegram", "domain"),
+    telegram_ip: metaProvider("geoip", "telegram", "ipcidr"),
 
-    openai: classicalProvider("https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/OpenAI/OpenAI.yaml", "./ruleset/openai.yaml"),
-    claude: classicalProvider("https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Claude/Claude.yaml", "./ruleset/claude.yaml"),
-    gemini: classicalProvider("https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Gemini/Gemini.yaml", "./ruleset/gemini.yaml"),
-    youtube: classicalProvider("https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/YouTube/YouTube.yaml", "./ruleset/youtube.yaml"),
-    spotify: classicalProvider("https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Spotify/Spotify.yaml", "./ruleset/spotify.yaml"),
-    github: classicalProvider("https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/GitHub/GitHub.yaml", "./ruleset/github.yaml"),
-    appleid: classicalProvider("https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/AppleID/AppleID.yaml", "./ruleset/appleid.yaml"),
-    microsoft: classicalProvider("https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Microsoft/Microsoft.yaml", "./ruleset/microsoft.yaml"),
+    // 应用细分规则（blackmatrix7 数据源）
+    openai: bmProvider("OpenAI"),
+    claude: bmProvider("Claude"),
+    gemini: bmProvider("Gemini"),
+    youtube: bmProvider("YouTube"),
+    spotify: bmProvider("Spotify"),
+    github: bmProvider("GitHub"),
+    appleid: bmProvider("AppleID"),
+    microsoft: bmProvider("Microsoft"),
   };
 
-  // 5. Rules
+  // 5. 分流规则（Rules）
   config["rules"] = [
-    // >>> Custom Rules (Highest Priority) <<<
-    // "DOMAIN-SUFFIX,example.com,Proxy",
-    // "DOMAIN-SUFFIX,mydirect.com,Direct",
-    // "IP-CIDR,192.168.10.0/24,Direct,no-resolve",
-
-    "RULE-SET,reject,AdBlock",
+    // 局域网 / 私有地址直连
     "RULE-SET,private,Direct",
-    "RULE-SET,lancidr,Direct,no-resolve",
 
+    // AI 相关分流
     "RULE-SET,openai,AI",
     "RULE-SET,claude,AI",
     "RULE-SET,gemini,AI",
 
+    // 细分媒体及服务分流
     "RULE-SET,youtube,YouTube",
     "RULE-SET,spotify,Spotify",
     "RULE-SET,github,GitHub",
     "RULE-SET,appleid,AppleID",
     "RULE-SET,microsoft,Microsoft",
-    "RULE-SET,google,Google",
-    "RULE-SET,telegramcidr,Telegram,no-resolve",
 
-    "RULE-SET,gfw,Proxy",
-    "RULE-SET,proxy,Proxy",
-    "RULE-SET,direct,Direct",
-    "RULE-SET,cncidr,Direct,no-resolve",
+    // Google / Telegram 专属规则（域名 + IP）
+    "RULE-SET,google_domain,Google",
+    "RULE-SET,google_ip,Google",
+    "RULE-SET,telegram_domain,Telegram",
+    "RULE-SET,telegram_ip,Telegram",
+
+    // 境外常用域名走代理
+    "RULE-SET,geolocation_not_cn,Proxy",
+
+    // 国内域名及国内 IP 直连
+    "RULE-SET,cn_domain,Direct",
+    "RULE-SET,cn_ip,Direct,no-resolve",
     "GEOIP,CN,Direct",
 
+    // 兜底策略
     "MATCH,Final",
   ];
 
