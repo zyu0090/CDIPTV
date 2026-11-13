@@ -17,7 +17,7 @@ function main(config) {
   const sgNodes = filterNodes(/\u65b0\u52a0\u5761|\u5761|\u72ee\u57ce|SG|Singapore/i);
   const usNodes = filterNodes(/\u7f8e|\u6ce2\u7279\u5170|\u8fbe\u62c9\u65af|\u4fc4\u52d2\u5188|\u51e4\u51f0\u57ce|\u8d39\u5229\u8499|\u7845\u8c37|\u62c9\u65af\u7ef4\u52a0\u65af|\u6d1b\u6749\u77f6|\u5723\u4f55\u585e|\u5723\u514b\u62c9\u62c9|\u897f\u96c5\u56fe|\u829d\u52a0\u54e5|US|United States/i);
 
-  // 3. 策略组配置（已修正 github.png 图标，并移除了 Direct 组和 DIRECT 节点选项）
+  // 3. 策略组配置
   const iconBase = "https://testingcf.jsdelivr.net/gh/Orz-3/mini@master/Color";
 
   config["proxy-groups"] = [
@@ -67,13 +67,13 @@ function main(config) {
       name: "AppleID",
       type: "select",
       icon: `${iconBase}/Apple.png`,
-      proxies: ["Proxy", "US", "HK", "JP", ...allNodes],
+      proxies: ["DIRECT", "Proxy", "US", "HK", "JP", ...allNodes], // 保留 DIRECT 选项
     },
     {
       name: "Microsoft",
       type: "select",
       icon: `${iconBase}/Microsoft.png`,
-      proxies: ["Proxy", "US", "HK", ...allNodes],
+      proxies: ["DIRECT", "Proxy", "US", "HK", ...allNodes],       // 保留 DIRECT 选项
     },
     {
       name: "Final",
@@ -170,9 +170,9 @@ function main(config) {
     microsoft: bmProvider("Microsoft"),
   };
 
-  // 5. 分流规则（直连走系统内置原生 DIRECT，不暴露为策略组）
+  // 5. 分流规则
   config["rules"] = [
-    // 局域网 / 私有地址默认 DIRECT
+    // 局域网 / 私有地址默认原生 DIRECT
     "RULE-SET,private,DIRECT",
 
     // AI 相关分流
@@ -196,7 +196,7 @@ function main(config) {
     // 境外常用域名走 Proxy
     "RULE-SET,geolocation_not_cn,Proxy",
 
-    // 国内域名及国内 IP 默认 DIRECT 直连
+    // 国内域名及国内 IP 默认原生 DIRECT 直连
     "RULE-SET,cn_domain,DIRECT",
     "RULE-SET,cn_ip,DIRECT,no-resolve",
     "GEOIP,CN,DIRECT",
