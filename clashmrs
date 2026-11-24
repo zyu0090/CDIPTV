@@ -1,0 +1,68 @@
+;Custom_OpenClash_Rules (精简版)
+;全分组防 DNS 泄漏订阅转换模板
+;作者：https://github.com/Aethersailor
+;项目地址：https://github.com/Aethersailor/Custom_OpenClash_Rules
+
+[custom]
+;设置规则标志位
+;以下规则，按照从上往下的顺序遍历，优先命中上位规则，规则重复无影响
+;修改顺序会影响分流效果
+
+;本地地址和域名直连
+ruleset=DIRECT,[]GEOSITE,private
+ruleset=DIRECT,[]GEOIP,private,no-resolve
+;新增 micu.hk 专属规则
+ruleset=🌐 MICU,[]DOMAIN-SUFFIX,micu.hk
+;本项目收录的直连规则
+ruleset=DIRECT,clash-classic:https://cdn.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/rule/Custom_Direct_Classical.yaml,28800
+;本项目收录的代理规则
+ruleset=🎯 FINAL,clash-classic:https://cdn.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/rule/Custom_Proxy_Classical.yaml,28800
+;国外 AI 统一整合到一组
+ruleset=🤖 AI服务,clash-domain:https://raw.githubusercontent.com/666OS/rules/release/mihomo/domain/AI.mrs,28800
+ruleset=🤖 AI服务,clash-ipcidr:https://raw.githubusercontent.com/666OS/rules/release/mihomo/ip/AI.mrs,28800|no-resolve
+ruleset=🤖 AI服务,[]GEOSITE,category-ai-!cn
+ruleset=🚀 GitHub,[]GEOSITE,github
+;谷歌相关服务（包含 YouTube、FCM、Google 域名）
+ruleset=🇬 谷歌服务,[]GEOSITE,youtube
+ruleset=🇬 谷歌服务,[]GEOSITE,googlefcm
+ruleset=🇬 谷歌服务,[]GEOSITE,google
+ruleset=✈️ Telegram,[]GEOSITE,telegram
+ruleset=🎻 Spotify,[]GEOSITE,spotify
+ruleset=🍎 AppleID,clash-classic:https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/AppleID/AppleID.yaml,28800
+ruleset=Ⓜ️ 微软服务,[]GEOSITE,microsoft
+;谷歌 IP 规则
+ruleset=🇬 谷歌服务,[]GEOIP,google,no-resolve
+ruleset=✈️ Telegram,[]GEOIP,telegram,no-resolve
+;由于 OpenClash 使用的大陆白名单收录不全，此处留有 geosite:cn 作为国内域名兜底
+ruleset=DIRECT,[]GEOSITE,cn
+;由于 OpenClash 使用的大陆白名单收录不全，此处留有 geoip:cn 作为国内 IP 兜底
+ruleset=DIRECT,[]GEOIP,cn,no-resolve
+;以上兜底规则会根据实际情况随时取消
+;国内冷门域名会命中漏网之鱼，如影响使用，请设置漏网之鱼直连
+;漏网之鱼直连时，无法通过 DNS 泄露测试，但是并不存在泄露
+ruleset=🎯 FINAL,[]FINAL
+;设置规则标志位结束
+
+;设置节点分组标志位
+custom_proxy_group=🌐 全部节点`select`.*
+custom_proxy_group=🚀 手动选择`select`[]🇭🇰 香港节点`[]🇺🇸 美国节点`[]🇯🇵 日本节点`[]🇸🇬 新加坡节点`[]🇼🇸 台湾节点`[]🇪🇺 欧洲节点
+custom_proxy_group=🌐 MICU`select`[]🚀 手动选择`[]🇭🇰 香港节点`[]🇺🇸 美国节点`[]🇯🇵 日本节点`[]🇸🇬 新加坡节点`[]🇼🇸 台湾节点`[]🇪🇺 欧洲节点`[]DIRECT
+custom_proxy_group=🤖 AI服务`select`[]🚀 手动选择`[]🇭🇰 香港节点`[]🇺🇸 美国节点`[]🇯🇵 日本节点`[]🇸🇬 新加坡节点`[]🇼🇸 台湾节点`[]🇪🇺 欧洲节点`[]DIRECT
+custom_proxy_group=🚀 GitHub`select`[]🚀 手动选择`[]🇭🇰 香港节点`[]🇺🇸 美国节点`[]🇯🇵 日本节点`[]🇸🇬 新加坡节点`[]🇼🇸 台湾节点`[]🇪🇺 欧洲节点`[]DIRECT
+custom_proxy_group=🇬 谷歌服务`select`[]🚀 手动选择`[]🇭🇰 香港节点`[]🇺🇸 美国节点`[]🇯🇵 日本节点`[]🇸🇬 新加坡节点`[]🇼🇸 台湾节点`[]🇪🇺 欧洲节点`[]DIRECT
+custom_proxy_group=✈️ Telegram`select`[]🚀 手动选择`[]🇭🇰 香港节点`[]🇺🇸 美国节点`[]🇯🇵 日本节点`[]🇸🇬 新加坡节点`[]🇼🇸 台湾节点`[]🇪🇺 欧洲节点`[]DIRECT
+custom_proxy_group=🎻 Spotify`select`[]🚀 手动选择`[]🇭🇰 香港节点`[]🇺🇸 美国节点`[]🇯🇵 日本节点`[]🇸🇬 新加坡节点`[]🇼🇸 台湾节点`[]🇪🇺 欧洲节点`[]DIRECT
+custom_proxy_group=🍎 AppleID`select`[]🚀 手动选择`[]🇭🇰 香港节点`[]🇺🇸 美国节点`[]🇯🇵 日本节点`[]🇸🇬 新加坡节点`[]🇼🇸 台湾节点`[]🇪🇺 欧洲节点`[]DIRECT
+custom_proxy_group=Ⓜ️ 微软服务`select`[]🚀 手动选择`[]🇭🇰 香港节点`[]🇺🇸 美国节点`[]🇯🇵 日本节点`[]🇸🇬 新加坡节点`[]🇼🇸 台湾节点`[]🇪🇺 欧洲节点`[]DIRECT
+custom_proxy_group=🎯 FINAL`select`[]🚀 手动选择`[]🇭🇰 香港节点`[]🇺🇸 美国节点`[]🇯🇵 日本节点`[]🇸🇬 新加坡节点`[]🇼🇸 台湾节点`[]🇪🇺 欧洲节点`[]DIRECT
+custom_proxy_group=🇭🇰 香港节点`url-test`(香港|^深港专线[0-9]*\[)`https://www.gstatic.com/generate_204`300,,50
+custom_proxy_group=🇺🇸 美国节点`url-test`(美国)`https://www.gstatic.com/generate_204`300,,50
+custom_proxy_group=🇯🇵 日本节点`url-test`(日本|沪日)`https://www.gstatic.com/generate_204`300,,50
+custom_proxy_group=🇸🇬 新加坡节点`url-test`(新加坡)`https://www.gstatic.com/generate_204`300,,50
+custom_proxy_group=🇼🇸 台湾节点`url-test`(台湾)`https://www.gstatic.com/generate_204`300,,50
+custom_proxy_group=🇪🇺 欧洲节点`url-test`(德国|英国|法国)`https://www.gstatic.com/generate_204`300,,50
+;设置分组标志位
+
+;下方参数请勿修改
+enable_rule_generator=true
+overwrite_original_rules=true
